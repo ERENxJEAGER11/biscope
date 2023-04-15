@@ -11,6 +11,14 @@ module.exports = {
   },
   plugins: ['react'],
   rules: {
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: false,
+        optionalDependencies: false,
+        peerDependencies: false,
+      },
+    ],
     'import/no-cycle': 0,
     'no-console': 0,
     'react/prop-types': 0,
