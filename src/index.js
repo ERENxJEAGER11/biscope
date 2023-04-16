@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './components/App';

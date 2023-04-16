@@ -1,16 +1,27 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Provider } from 'react-redux';
 import NavBar from './NavBar/NavBar';
+import store from '../app/store';
 
 function App() {
+  const theme = createTheme({
+    // Override or create new styles, colors, palettes...
+  });
+
   return (
-    <div className="flex h-[100%]">
-      <NavBar />
-      <main className="flex-grow p-2">
-        <div className="h-[70px]" />
-        <Outlet />
-      </main>
-    </div>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <div className="flex h-[100%]">
+          <NavBar />
+          <main className="flex-grow p-10 sm:ml-[240px]">
+            <div className="h-[70px]" />
+            <Outlet />
+          </main>
+        </div>
+      </ThemeProvider>
+    </Provider>
   );
 }
 
