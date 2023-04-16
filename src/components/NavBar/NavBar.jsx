@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
 import { ThemeConsumer } from 'styled-components';
 import Sidebar from '../Sidebar/Sidebar';
+import Search from '../Search/Search';
 
 function NavBar() {
   const isMobile = useMediaQuery('(max-width:600px)');
@@ -66,7 +67,7 @@ function NavBar() {
               </Button>
             )}
           </div>
-          {isMobile && 'Search...'}
+          {isMobile && <Search />}
         </Toolbar>
       </AppBar>
       <div>

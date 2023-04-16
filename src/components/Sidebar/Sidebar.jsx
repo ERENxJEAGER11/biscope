@@ -11,15 +11,28 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch, useSelector } from 'react-redux';
+import { useGetGenresQuery } from '../../services/TMDB';
+import categories from '../../assets/index';
+import { selectGenreOrCategory } from '../../features/currentGenreOrCategory';
+
+const redLogo =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkw4vFyaUMKu9NK3e6wfQpaiTw3tRydqztWPKiCLxJHui4PcBNXKQYjjOWk-YqXPiR4hM&usqp=CAU';
+const blueLogo =
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkw4vFyaUMKu9NK3e6wfQpaiTw3tRydqztWPKiCLxJHui4PcBNXKQYjjOWk-YqXPiR4hM&usqp=CAU';
 
 function Sidebar({ setMobileOpen }) {
+  const { data, isFetching } = useGetGenresQuery();
+  console.log(data);
   const theme = useTheme();
-  const redLogo =
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkw4vFyaUMKu9NK3e6wfQpaiTw3tRydqztWPKiCLxJHui4PcBNXKQYjjOWk-YqXPiR4hM&usqp=CAU';
-  const blueLogo =
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkw4vFyaUMKu9NK3e6wfQpaiTw3tRydqztWPKiCLxJHui4PcBNXKQYjjOWk-YqXPiR4hM&usqp=CAU';
 
-  const categories = [
+  const dispatch = useDispatch();
+  const { genreIdOrCategoryName } = useSelector(
+    (state) => state.currentGenreOrCategory
+  );
+
+  const categoriesLabel = [
     {
       label: 'Popular',
       value: 'popular',
@@ -33,20 +46,7 @@ function Sidebar({ setMobileOpen }) {
       value: 'upcoming',
     },
   ];
-  const demoCategories = [
-    {
-      label: 'Action',
-      value: 'action',
-    },
-    {
-      label: 'Comedy',
-      value: 'Comedy',
-    },
-    {
-      label: 'Horror',
-      value: 'horror',
-    },
-  ];
+
   return (
     <>
       <Link to="/" className="flex justify-center py-[10%] px-0">
@@ -59,11 +59,15 @@ function Sidebar({ setMobileOpen }) {
       <Divider />
       <List>
         <ListSubheader>Categories</ListSubheader>
-        {categories.map(({ label, value }) => (
+        {categoriesLabel.map(({ label, value }) => (
           <Link key={value} className="decoration-0" to="/">
-            <ListItem>
+            <ListItem onClick={() => dispatch(selectGenreOrCategory(value))}>
               <ListItemIcon>
-                {/* <img src="" alt="categories" className="" /> */}
+                <img
+                  src={categories[value.toLowerCase()]}
+                  alt="genre"
+                  className=""
+                />
               </ListItemIcon>
               <ListItemText primary={label} />
             </ListItem>
@@ -73,16 +77,26 @@ function Sidebar({ setMobileOpen }) {
       <Divider />
       <List>
         <ListSubheader>Genres</ListSubheader>
-        {demoCategories.map(({ label, value }) => (
-          <Link key={value} className="decoration-0" to="/">
-            <ListItem>
-              <ListItemIcon>
-                {/* <img src="" alt="genre" className="" /> */}
-              </ListItemIcon>
-              <ListItemText primary={label} />
-            </ListItem>
-          </Link>
-        ))}
+        {isFetching ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : (
+          data.genres.map(({ name, id }) => (
+            <Link key={id} className="decoration-0" to="/">
+              <ListItem onClick={() => dispatch(selectGenreOrCategory(id))}>
+                <ListItemIcon>
+                  <img
+                    src={categories[name.toLowerCase()]}
+                    alt="genre"
+                    className=""
+                  />
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            </Link>
+          ))
+        )}
       </List>
     </>
   );
