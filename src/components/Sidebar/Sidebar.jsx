@@ -24,7 +24,7 @@ const blueLogo =
 
 function Sidebar({ setMobileOpen }) {
   const { data, isFetching } = useGetGenresQuery();
-  console.log(data);
+  // console.log(data);
   const theme = useTheme();
 
   const dispatch = useDispatch();
