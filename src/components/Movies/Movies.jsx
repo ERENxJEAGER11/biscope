@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux';
 
 import { useGetMoviesQuery } from '../../services/TMDB';
 import MovieList from '../MovieList/MovieList';
+import Pagination from '../Pagination/Pagination';
+import FeaturedMovie from '../FeaturedMovie/FeaturedMovie';
 
 function Movies() {
   const [page, setPage] = useState(1);
@@ -46,9 +48,13 @@ function Movies() {
 
   if (error) return 'An error occurred.';
 
+  console.log('Movies data: ', data.results[0]);
+
   return (
     <div>
-      <MovieList movies={data} />
+      <FeaturedMovie movies={data.results[0]}/>
+      <MovieList movies={data} numberOfMovies={18} excludFirst/>
+      <Pagination page={page} setPage={setPage} totalPages={data.total_pages}/>
     </div>
   );
 }
